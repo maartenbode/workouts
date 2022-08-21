@@ -37,7 +37,7 @@ export default function Set(props) {
             errors={props.errors}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Set bewerken</h2>}
         >
-            <Head title="Set bewerken"/>
+            <Head title="Set aanpassen"/>
 
             <div className="py-6">
                 <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
