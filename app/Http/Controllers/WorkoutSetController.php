@@ -40,8 +40,12 @@ class WorkoutSetController extends Controller
         return back();
     }
 
-    public function show(WorkoutSet $workoutSet)
+    public function show(Request $request, WorkoutSet $workoutSet)
     {
+        $workoutSet = WorkoutSet::query()
+            ->where('user_uuid', $request->user()->uuid)
+            ->findOrFail($workoutSet->uuid);
+
         return Inertia::render('Workouts/Set', [
             'set' => $workoutSet,
         ]);
@@ -54,6 +58,10 @@ class WorkoutSetController extends Controller
 
     public function update(Request $request, WorkoutSet $workoutSet)
     {
+        $workoutSet = WorkoutSet::query()
+            ->where('user_uuid', $request->user()->uuid)
+            ->findOrFail($workoutSet->uuid);
+
         $request->validate($this->validationRules);
 
         $workoutSet->update([
@@ -65,8 +73,12 @@ class WorkoutSetController extends Controller
         return back();
     }
 
-    public function destroy(WorkoutSet $workoutSet)
+    public function destroy(Request $request, WorkoutSet $workoutSet)
     {
+        $workoutSet = WorkoutSet::query()
+            ->where('user_uuid', $request->user()->uuid)
+            ->findOrFail($workoutSet->uuid);
+
         $workout = $workoutSet->workout;
 
         $workoutSet->delete();

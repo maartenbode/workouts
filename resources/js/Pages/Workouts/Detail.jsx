@@ -5,8 +5,8 @@ import { Inertia } from '@inertiajs/inertia';
 
 export default function Detail(props) {
     const [values, setValues] = useState({
-        amount: 3,
-        reps: 10,
+        amount: "",
+        reps: "",
         weight: "",
         workout_uuid: props.workout.uuid
     })
@@ -35,8 +35,10 @@ export default function Detail(props) {
         >
             <Head title={props.workout.name}/>
 
-            <div className="py-6">
+            <div className="py-4">
                 <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                    <h2 className="font-bold mb-3">Set toevoegen</h2>
+
                     <div className="mb-5">
                         <form onSubmit={handleSubmit}>
                             <div className="flex justify-between">
@@ -62,29 +64,37 @@ export default function Detail(props) {
                         </form>
                     </div>
 
-                    {Object.keys(props.sets).map((index) => (
-                        <div className="mb-4" key={`set-group-${index}`}>
-                            <div className="mb-2">
-                                <span className="text-stone-700 text-sm">{index}</span>
-                            </div>
+                    <h2 className="font-bold mb-3">Geschiedenis</h2>
 
-                            <div className="bg-white rounded-lg border-cream-dark border border-b-2">
-                                {props.sets[index].map((set, index) => (
-                                    <Link href={route('workout-sets.show', set.uuid)} key={`set-${set.uuid}`} className={`p-3 flex justify-between ${index !== 0 && 'border-t'}`}>
-                                        <span>
-                                            {set.amount}x{set.reps}
-                                        </span>
+                    {Object.keys(props.sets).length ? (
+                        <>
+                            {Object.keys(props.sets).map((index) => (
+                                <div className="mb-4" key={`set-group-${index}`}>
+                                    <div className="mb-2">
+                                        <span className="text-stone-700 text-sm">{index}</span>
+                                    </div>
 
-                                        <div>
-                                            <strong className="mr-2">{set.weight}kg</strong>
+                                    <div className="bg-white rounded-lg border-cream-dark border border-b-2">
+                                        {props.sets[index].map((set, index) => (
+                                            <Link href={route('workout-sets.show', set.uuid)} key={`set-${set.uuid}`} className={`p-3 flex justify-between ${index !== 0 && 'border-t'}`}>
+                                                <span>
+                                                    {set.amount}x{set.reps}
+                                                </span>
 
-                                            <span>→</span>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                                                <div>
+                                                    <strong className="mr-2">{set.weight}kg</strong>
+
+                                                    <span>→</span>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    ) : (
+                        <div className="text-stone-600 text-sm">Nog geen sets...</div>
+                    )}
                 </div>
             </div>
         </Authenticated>

@@ -9,12 +9,22 @@ use Inertia\Inertia;
 
 class WorkoutController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $workouts = Workout::orderBy('name')->get();
+        $workouts = Workout::query()
+            ->with('sets', fn ($query) => $query->where('user_uuid', $request->user()->uuid))
+            ->orderBy('name')
+            ->get();
 
         return Inertia::render('Workouts/Index', [
-            'workouts' => $workouts,
+            'workouts' => $workouts->map(function (Workout $workout) {
+                return array_merge($workout->toArray(), [
+                    'stats' => [
+                        'max_weight' => $workout->sets->max('weight'),
+                        'last_set' => $workout->sets->count() ? $workout->sets->sortByDesc('created_at')->first()->created_at : null,
+                    ]
+                ]);
+            }),
         ]);
     }
 
